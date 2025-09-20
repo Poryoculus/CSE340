@@ -1,6 +1,360 @@
-/******* Change Box Model ***************/
+/**********************************************************
+ * styles.css
+ * Mobile-first, accessible, responsive layout for CSE Motors
+ * Put this file in public/css/styles.css
+ **********************************************************/
+
+/* ========== Box model reset ========== */
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+/* ========== Color & typography choices (accessible) ========== */
+/* Primary dark blue passes WCAG with white text */
+:root{
+  --primary: #0b3d91;     /* primary color (nav, accents) */
+  --accent:  #0077b6;     /* accent color (buttons) */
+  --muted:   #6b7280;     /* secondary text */
+  --text:    #111111;     /* body text */
+  --bg:      #ffffff;     /* wrapper bg */
+  --page-bg: #f3f6fb;     /* subtle page bg fallback if image fails */
+  --radius:  10px;
+  --container-max: 1000px;
+  --gap: 1rem;
+  --font-stack: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ========== Base styles (mobile-first) ========== */
+html,body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-stack);
+  color: var(--text);
+  background-color: var(--page-bg);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Use the checkerboard image as page background if available.
+   Serve it with absolute path from public/images/... so it loads on any route. */
+body {
+  background-image: url("/images/site/checkerboard.jpg");
+  background-repeat: repeat;
+  background-size: auto;
+  background-color: var(--page-bg); /* fallback */
+  line-height: 1.4;
+  font-size: 16px; /* base mobile font */
+}
+
+/* Wrapper — center content, white card look */
+#wrapper {
+  background: var(--bg);
+  border: 3px solid var(--primary);
+  border-radius: var(--radius);
+  margin: 1rem;
+  padding: 1rem;
+  max-width: calc(100% - 2rem);
+  box-shadow: 0 6px 18px rgba(11,61,145,0.08);
+  overflow: visible; /* ensure absolute elements inside are visible */
+}
+
+/* Header — compact for mobile */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.25rem;
+}
+
+.siteName a {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: 0.2px;
+}
+
+#tools a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Navigation (mobile: stacked) */
+#navigation {
+  margin-top: 0.75rem;
+}
+
+#navigation ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* mobile-first: vertical */
+  gap: 0.25rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#navigation li {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.65rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.95rem;
+}
+
+/* Provide focus styles for keyboard users */
+#navigation li:focus,
+#navigation li:focus-visible,
+#navigation li:hover {
+  outline: none;
+  background: color-mix(in srgb, var(--primary) 85%, black 15%); /* subtle darken */
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06);
+}
+
+/* Main heading inside content area */
+main h2,
+main h1 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* ========== Hero section ========== */
+#heroe-section {
+  margin: 1rem 0;
+  position: relative;
+  display: block;
+}
+
+/* Hero image scales full width on mobile */
+#heroe-section img#Heroe {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+  height: auto;
+}
+
+
+  /* Hero text overlay stays on image on mobile */
+.heroe-text,
+#heroe-section div {
+  position: absolute;
+  top: 10%;    
+  left: 5%;    
+  background: rgba(255,255,255,0.9);
+  padding: 0.75rem;
+  border-radius: 6px;
+  width: 40%;  /* mobile width */
+  font-size: 8px;
+}
+
+.heroe-text h3 {
+  margin: 0 0 0.35rem 0;
+  font-size: 1.125rem;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.heroe-text p {
+  margin: 0.25rem 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Button: accessible size, uses accent */
+.heroe-text button {
+  display: inline-block;
+  margin-top: 0.65rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+}
+
+/* Make buttons keyboard-accessible (outline when focused) */
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+  outline: 3px solid rgba(0,119,182,0.18);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ========== Down section (upgrades & reviews) stacked on mobile ========== */
+#down {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.25rem 0;
+}
+
+#upgrades, #reviews {
+  width: 100%;
+}
+
+/* Upgrade figures line up horizontally and wrap */
+#upgrades {
+  padding: 0.25rem 0;
+}
+
+#upgrades h3,
+#reviews h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+
+#upgrades .grid {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#upgrades figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 22%;
+  min-width: 80px;
+  margin: 0.25rem 0;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#upgrades img {
+  width: 100%;
+  height: auto;
+  max-width: 100px;
+  border-radius: 6px;
+}
+
+#upgrades figcaption a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+/* Reviews list: readable spacing */
+#reviews ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Footer */
+footer {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  padding: 0.75rem 0 0;
+}
+
+/* Make content not overflow horizontally (important for accessibility) */
+img, figure {
+  max-width: 100%;
+}
+
+/* ========== Larger screens: one media query (tablet/desktop) ========== */
+@media (min-width: 768px) {
+  /* Wider wrapper centered with set max-width */
+  #wrapper {
+    max-width: var(--container-max);
+    margin: 2rem auto;
+    padding: 1.25rem;
+  }
+
+  /* Navigation becomes horizontal */
+  #navigation ul {
+    flex-direction: row;
+  }
+
+  #navigation li {
+    padding: 0.9rem 1.25rem;
+    border-radius: 6px;
+    margin: 0 0.25rem;
+  }
+
+  /* Hero: image centered and text overlays to the left */
+  #heroe-section {
+    display: block;
+  }
+
+  #heroe-section img#Heroe {
+    max-width: 700px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  /* Place text overlay absolute on larger screens */
+  .heroe-text,
+  #heroe-section div {
+    position: absolute;
+    top: 20%;
+    left: 8%;
+    width: 34%;
+    background: rgba(255,255,255,0.92);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .heroe-text h3 {
+    font-size: 1.25rem;
+  }
+
+  /* Down: two-column layout */
+  #down {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  #upgrades, #reviews {
+    width: 48%;
+  }
+
+  #upgrades .grid {
+    gap: 1rem;
+  }
+
+  #upgrades figure {
+    width: calc(25% - 1rem);
+    min-width: 140px;
+  }
+
+  #upgrades img {
+    max-width: 120px;
+  }
+}
+
+/* Optional extra polish for very wide screens */
+@media (min-width: 1100px) {
+  #heroe-section img#Heroe {
+    max-width: 900px;
+  }
+
+  .heroe-text {
+    left: 10%;
+    top: 22%;
+    width: 30%;
+  }
 }
