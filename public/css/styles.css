@@ -313,7 +313,7 @@ img, figure {
     width: 34%;
     background: rgba(255,255,255,0.92);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 0.7rem;
   }
 
   .heroe-text h3 {
@@ -357,4 +357,9 @@ img, figure {
     top: 22%;
     width: 30%;
   }
+
+  .heroe-text,
+#heroe-section div {
+  font-size: 1rem;
+}
 }
