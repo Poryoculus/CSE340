@@ -7,7 +7,7 @@ const Util = {}
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
   let list = "<ul>"
-  list += '<li><a href="/" title="Home page">Home</a></li>'
+    list += '<li><a href="/" title="Home page">Home</a></li>'
   data.rows.forEach((row) => {
     list += "<li>"
     list +=
@@ -58,6 +58,37 @@ Util.buildClassificationGrid = async function(data){
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
+}
+
+/* **************************************
+* Build the vehicle detail view HTML
+* ************************************ */
+Util.buildVehicleDetail = async function(vehicle){
+  let detail = ""
+  if(vehicle){
+    detail = '<section class="vehicle-detail">'
+    
+    // Full-size image
+    detail += '<img src="' + vehicle.inv_image + '" alt="Image of ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' on CSE Motors" />'
+    
+    // Vehicle information
+    detail += '<div class="vehicle-info">'
+    detail += '<h2>' + vehicle.inv_year + ' ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + '</h2>'
+    detail += '<p><strong>Price:</strong> $' 
+      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</p>'
+    detail += '<p><strong>Mileage:</strong> ' 
+      + new Intl.NumberFormat('en-US').format(vehicle.inv_miles) + ' miles</p>'
+    detail += '<p><strong>Description:</strong> ' + vehicle.inv_description + '</p>'
+    detail += '</div>' // close vehicle-info
+    
+    detail += '</section>' // close vehicle-detail
+  } else {
+    detail = '<p class="notice">Sorry, vehicle details could not be found.</p>'
+  }
+
+  return detail
 }
 
 /* ****************************************

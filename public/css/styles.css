@@ -13,18 +13,19 @@
 
 /* ========== Color & typography choices (accessible) ========== */
 /* Primary dark blue passes WCAG with white text */
-:root{
-  --primary: #0b3d91;     /* primary color (nav, accents) */
-  --accent:  #0077b6;     /* accent color (buttons) */
-  --muted:   #6b7280;     /* secondary text */
-  --text:    #111111;     /* body text */
-  --bg:      #ffffff;     /* wrapper bg */
-  --page-bg: #f3f6fb;     /* subtle page bg fallback if image fails */
+:root {
+  --primary: #3a1f7b;   /* deep purple, AAA compliant on white */
+  --accent:  #b33d17;    /* rich orange-red, AAA compliant on white */
+  --muted:   #3c3c3c;    /* dark gray for secondary text */
+  --text:    #111111;    /* body text */
+  --bg:      #ffffff;    /* wrapper background */
+  --page-bg: #f6f5ff;    /* subtle lavender background */
+  --link:    #2e1a63;    /* darker purple for links, AAA compliant on page-bg */
   --radius:  10px;
   --container-max: 1000px;
   --gap: 1rem;
   --font-stack: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
+}ç
 
 /* ========== Base styles (mobile-first) ========== */
 html,body {
@@ -79,7 +80,7 @@ header {
 
 #tools a {
   text-decoration: none;
-  color: var(--muted);
+  color: var(--link);
   font-size: 0.95rem;
 }
 
@@ -109,6 +110,13 @@ header {
   user-select: none;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   font-size: 0.95rem;
+}
+
+#navigation li a {
+  color: white;
+  text-decoration: none;
+  display: block; /* fill entire li */
+
 }
 
 /* Provide focus styles for keyboard users */
@@ -273,6 +281,16 @@ img, figure {
   max-width: 100%;
 }
 
+.namePrice a{
+  color: var(--text);
+  text-decoration: none;
+  display: block; /* fill entire li */
+}
+
+.namePrice :hover {
+  color: #b33d17;
+}
+
 /* ========== Larger screens: one media query (tablet/desktop) ========== */
 @media (min-width: 768px) {
   /* Wider wrapper centered with set max-width */
@@ -344,6 +362,77 @@ img, figure {
   #upgrades img {
     max-width: 120px;
   }
+}
+
+/* ===== Vehicle Detail Page ===== */
+#vehicle-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+#vehicle-detail img {
+  flex: 1 1 400px;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.vehicle-info {
+  flex: 1 1 400px;
+}
+
+.vehicle-info h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.vehicle-info p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.vehicle-info strong {
+  color: var(--text);
+}
+
+/* Back to inventory button */
+.vehicle-info .back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.65rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.vehicle-info .back-btn:hover,
+.vehicle-info .back-btn:focus {
+  background-color: color-mix(in srgb, var(--accent) 85%, black 15%);
+  outline: none;
+}
+
+/* Notice message */
+.notice {
+  color: #b00020;
+  font-weight: bold;
+  margin: 1rem 0;
 }
 
 /* Optional extra polish for very wide screens */
