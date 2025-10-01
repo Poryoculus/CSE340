@@ -44,4 +44,9 @@ invCont.buildByInvId = async function (req, res, next) {
   })
 }
 
+invCont.triggerError = async function (req, res, next){
+    // This is intentionally crashing the route
+    throw new Error("This is a test 500 error")
+}
+
 module.exports = invCont
