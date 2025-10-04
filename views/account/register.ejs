@@ -1,10 +1,7 @@
-<%- include('../partials/header') %>
 
   <h1><%= title %></h1>
+<%- messages() %>
 
-  <% if (message) { %>
-    <div class="flash-message"><%= message %></div>
-  <% } %>
 <div class="login-wrapper">
 
     <form action="/account/register" method="post">
