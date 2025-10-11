@@ -50,10 +50,10 @@ invCont.buildByInvId = async function (req, res, next) {
 
 invCont.buildManagementView = async function (req, res, next) {
   let nav = await utilities.getNav() 
-  res.render('inventory/management', {
-    title: 'Inventory Management',
+  res.render("inventory/management", {
+    title: "Inventory Management",
     nav,
-    messages: req.flash('notice') 
+    messages: req.flash("notice") 
   })
 }
 
@@ -101,24 +101,84 @@ invCont.addClassification = async function (req, res, next) {
   }
 }
 /* ***************************
- * Handle POST add inventory data
-
-
-
-invController.buildAddInventory = async (req, res) => {
-  let nav = await utilities.getNav()
-  const classificationList = await utilities.buildClassificationList()
-  res.render('inventory/add-inventory', {
-    title: 'Add Inventory',
-    nav,
-    classificationList,
-    errors: null,
-    messages: req.flash('notice'),
-    formData: {}
-  })
-}
+ *  Build Add Inventory View
  * ************************** */
+invCont.buildAddInventory = async function (req, res, next) {
+  try {
+    let nav = await utilities.getNav()
+    const classificationList = await utilities.buildClassificationList() // from utilities/index.js
+    res.render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      classificationList,
+      errors: null,
+      messages: req.flash("notice"),
+      formData: {} // sticky fields
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 
+/* ***************************
+ *  Handle POST Add Inventory Data
+ * ************************** */
+invCont.addInventory = async function (req, res, next) {
+  try {
+    const {
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles
+    } = req.body
+
+    const image = inv_image && inv_image.trim() ? inv_image.trim() : "/images/no-image-available.png"
+    const thumbnail = inv_thumbnail && inv_thumbnail.trim() ? inv_thumbnail.trim() : "/images/no-image-available-thumb.png"
+
+    const item = {
+      classification_id,
+      inv_make: inv_make.trim(),
+      inv_model: inv_model.trim(),
+      inv_description: inv_description ? inv_description.trim() : "",
+      inv_image: image,
+      inv_thumbnail: thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles: inv_miles || 0
+    }
+
+    const addResult = await invModel.addInventoryItem(item)
+
+    if (addResult && addResult.rowCount > 0) {
+      req.flash("notice", `Vehicle "${item.inv_make} ${item.inv_model}" added successfully!`)
+      let nav = await utilities.getNav()
+      res.status(201).render("inventory/management", {
+        title: "Inventory Management",
+        nav,
+        messages: req.flash("notice")
+      })
+    } else {
+      req.flash("notice", "Failed to add inventory item.")
+      let nav = await utilities.getNav()
+      const classificationList = await utilities.buildClassificationList(item.classification_id)
+      res.status(501).render("inventory/add-inventory", {
+        title: "Add Inventory",
+        nav,
+        classificationList,
+        messages: req.flash("notice"),
+        errors: null,
+        formData: req.body
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
 
 invCont.triggerError = async function (req, res, next){
     // This is intentionally crashing the route

@@ -12,13 +12,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ✅ Client-side validation
-  const form = document.getElementById('add-classification-form');
-  form.addEventListener('submit', e => {
-    const input = document.getElementById('classification_name');
-    const pattern = /^[A-Za-z0-9]+$/;
-    if (!pattern.test(input.value)) {
-      e.preventDefault();
-      alert('Classification name cannot contain spaces or special characters.');
-    }
-  });
