@@ -44,6 +44,82 @@ invCont.buildByInvId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build Add Management view
+ * ************************** */
+
+invCont.buildManagementView = async function (req, res, next) {
+  let nav = await utilities.getNav() 
+  res.render('inventory/management', {
+    title: 'Inventory Management',
+    nav,
+    messages: req.flash('notice') 
+  })
+}
+
+
+/* ***************************
+ *  Build Add Classification view
+ * ************************** */
+
+invCont.buildAddClassification = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("inventory/add-classification", {
+    title: "Add New Classification",
+    nav,
+    messages: req.flash("notice"),
+    errors: null,
+    classification_name: '' 
+  })
+}
+
+/* ***************************
+ * Handle POST add classification data 
+ * ************************** */
+
+invCont.addClassification = async function (req, res, next) {
+  const { classification_name } = req.body
+  const addResult = await invModel.addClassification(classification_name)
+
+  if (addResult) {
+    req.flash("notice", "Classification added successfully!")
+    let nav = await utilities.getNav()
+    res.status(201).render("inventory/management", {
+      title: "Inventory Management",
+      nav,
+      messages: req.flash("notice")
+    })
+  } else {
+    req.flash("notice", "Failed to add classification.")
+    let nav = await utilities.getNav()
+    res.status(501).render("inventory/add-classification", {
+      title: "Add New Classification",
+      nav,
+      messages: req.flash("notice"),
+      errors: null
+    })
+  }
+}
+/* ***************************
+ * Handle POST add inventory data
+
+
+
+invController.buildAddInventory = async (req, res) => {
+  let nav = await utilities.getNav()
+  const classificationList = await utilities.buildClassificationList()
+  res.render('inventory/add-inventory', {
+    title: 'Add Inventory',
+    nav,
+    classificationList,
+    errors: null,
+    messages: req.flash('notice'),
+    formData: {}
+  })
+}
+ * ************************** */
+
+
 invCont.triggerError = async function (req, res, next){
     // This is intentionally crashing the route
     throw new Error("This is a test 500 error")

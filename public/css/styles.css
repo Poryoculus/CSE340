@@ -649,6 +649,14 @@ form p a {
 form p a:hover {
   text-decoration: underline;
 }
+.flash-message {
+  background-color: #e3f2fd;
+  border: 1px solid #2196f3;
+  color: #0d47a1;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
 
 /* Optional extra polish for very wide screens */
 @media (min-width: 1100px) {
