@@ -97,7 +97,16 @@ invValidate.inventoryRules = () => {
     body('inv_thumbnail')
       .optional({ checkFalsy: true })
       .trim()
+      .escape(),
+    
+    body('inv_color')
+      .trim()
+      .notEmpty()
+      .withMessage('Color is required.')
+      .matches(/^[A-Za-z0-9 ]+$/)
+      .withMessage('Color must only contain letters, numbers, and spaces.')
       .escape()
+
   ]
 }
 

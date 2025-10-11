@@ -134,7 +134,8 @@ invCont.addInventory = async function (req, res, next) {
       inv_thumbnail,
       inv_price,
       inv_year,
-      inv_miles
+      inv_miles,
+      inv_color
     } = req.body
 
     const image = inv_image && inv_image.trim() ? inv_image.trim() : "/images/no-image-available.png"
@@ -149,7 +150,8 @@ invCont.addInventory = async function (req, res, next) {
       inv_thumbnail: thumbnail,
       inv_price,
       inv_year,
-      inv_miles: inv_miles || 0
+      inv_miles: inv_miles || 0,
+      inv_color,
     }
 
     const addResult = await invModel.addInventoryItem(item)

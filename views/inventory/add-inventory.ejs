@@ -39,15 +39,15 @@
   <input id="inv_thumbnail" name="inv_thumbnail" type="text"
          value="<%= formData.inv_thumbnail || '/images/no-image-available-thumb.png' %>">
     <label for="inv_color">Color</label>
-<input
-  type="text"
-  id="inv_color"
-  name="inv_color"
-  value="<%= formData.inv_color || '' %>"
-  required
-  pattern="^[A-Za-z0-9 ]+$"
-  title="Letters, numbers, and spaces only"
-/>
+    <input
+    type="text"
+    id="inv_color"
+    name="inv_color"
+    value="<%= formData.inv_color || '' %>"
+    required
+    pattern="^[A-Za-z0-9 ]+$"
+    title="Letters, numbers, and spaces only"
+    />
 
   <button type="submit">Add Vehicle</button>
 </form>
