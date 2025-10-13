@@ -12,6 +12,7 @@ const app = express()
 const session = require("express-session")
 const pool = require('./database/')
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 
 const static = require("./routes/static")
@@ -43,7 +44,7 @@ app.use(session({
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(cookieParser())
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){

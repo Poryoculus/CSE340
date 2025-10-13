@@ -1,0 +1,11 @@
+
+<main>
+  <h1>Account Management</h1>
+  <% if (messages && messages.success) { %>
+    <p class="notice"><%= messages.success %></p>
+  <% } %>
+  <% if (messages && messages.error) { %>
+    <p class="error"><%= messages.error %></p>
+  <% } %>
+  <p>You're logged in.</p>
+</main>
