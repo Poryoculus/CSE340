@@ -1,0 +1,75 @@
+<div>
+  <!-- Display flash messages -->
+  <%- messages.notice %>
+
+  <!-- Display validation errors -->
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <h1><%= title %></h1>
+
+  <!-- Account Update Form -->
+  <section>
+    <h2>Update Account Information</h2>
+    <form action="/account/update-info" method="POST">
+      <!-- Hidden account_id -->
+      <input type="hidden" name="account_id" value="<%= account_id %>">
+
+      <label for="first_name">First Name</label>
+      <input 
+        type="text" 
+        id="first_name" 
+        name="first_name" 
+        value="<%= first_name || '' %>" 
+        required
+      >
+
+      <label for="last_name">Last Name</label>
+      <input 
+        type="text" 
+        id="last_name" 
+        name="last_name" 
+        value="<%= last_name || '' %>" 
+        required
+      >
+
+      <label for="email">Email</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        value="<%= email || '' %>" 
+        required
+      >
+
+      <button type="submit">Update Account</button>
+    </form>
+  </section>
+
+  <!-- Change Password Form -->
+  <section>
+    <h2>Change Password</h2>
+    <form action="/account/update-password" method="POST">
+      <!-- Hidden account_id -->
+      <input type="hidden" name="account_id" value="<%= account_id %>">
+
+      <label for="new_password">New Password</label>
+      <input 
+        type="password" 
+        id="new_password" 
+        name="new_password" 
+        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" 
+        title="Minimum 8 characters, at least 1 letter and 1 number"
+        required
+      >
+      <small>Enter a new password. Must be at least 8 characters, including letters and numbers.</small>
+
+      <button type="submit">Change Password</button>
+    </form>
+  </section>
+</div>

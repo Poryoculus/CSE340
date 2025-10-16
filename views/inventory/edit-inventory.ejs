@@ -1,0 +1,20 @@
+<h1>Edit Classification</h1>
+
+<form action="/inv/update-classification" method="POST" id="edit-classification-form">
+  <!-- Include hidden input for classification_id -->
+  <input type="hidden" name="classification_id"
+    <% if(locals.classification_id) { %> value="<%= locals.classification_id %>" <% } %>
+  >
+
+  <label for="classification_name">Classification Name</label>
+  <input 
+    type="text" 
+    id="classification_name" 
+    name="classification_name" 
+    pattern="^[A-Za-z0-9]+$"
+    title="No spaces or special characters allowed"
+    value="<%= classification_name %>"  
+    required
+  >
+  <button type="submit">Update Classification</button>
+</form>

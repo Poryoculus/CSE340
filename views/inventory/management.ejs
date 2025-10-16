@@ -1,4 +1,3 @@
-<%- include('../partials/header') %>
 
 <h1>Inventory Management</h1>
 
@@ -13,6 +12,13 @@
 <ul>
   <li><a href="/inv/add-classification">Add New Classification</a></li>
   <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
+ 
 </ul>
+ <h2>Manage Inventory</h2>
+ <%- classificationSelect %> 
+  <table id="inventoryDisplay"></table>
+  
 
-<%- include('../partials/footer') %>
+  <noscript>JavaScript must be enabled to use this page.</noscript>
+
+  <script src="../../js/inventory.js"></script>

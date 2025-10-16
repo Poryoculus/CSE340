@@ -1,41 +1,40 @@
-// Needed Resources 
-const express = require("express")
-const router = new express.Router() 
-const invController = require("../controllers/invController")
-const invValidate = require('../utilities/inv-validation')
-const utilities = require("../utilities/")  
+const express = require("express");
+const router = new express.Router();
+const invController = require("../controllers/invController");
+const invValidate = require('../utilities/inv-validation');
+const utilities = require("../utilities/");
 
-// Route to build inventory by classification view
+// Public routes (accessible to all visitors)
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
-
-// Route to build detail view by vehicle id 
 router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInvId));
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
+router.get("/trigger-error", utilities.handleErrors(invController.triggerError));
 
-router.get("/trigger-error", utilities.handleErrors(invController.triggerError))
+// Admin/Employee routes (restricted)
+router.get("/", utilities.requireAdmin, utilities.handleErrors(invController.buildManagementView));
 
-// Route to build the management view
-router.get("/", utilities.handleErrors(invController.buildManagementView));
-
-// Route to build the add classification view
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
-
-// Handle the add classification form submission
+router.get("/add-classification", utilities.requireAdmin, utilities.handleErrors(invController.buildAddClassification));
 router.post(
   "/add-classification",
-  invValidate.classificationRules(),  
-  invValidate.checkClassificationData, 
+  utilities.requireAdmin,
+  invValidate.classificationRules(),
+  invValidate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
 );
 
-// Add inventory (GET)
-router.get('/add-inventory', utilities.handleErrors(invController.buildAddInventory));
-
-// Add inventory (POST)
+router.get('/add-inventory', utilities.requireAdmin, utilities.handleErrors(invController.buildAddInventory));
 router.post(
   '/add-inventory',
+  utilities.requireAdmin,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
-)
+);
+
+router.get("/edit/:inv_id", utilities.requireAdmin, utilities.handleErrors(invController.editInventoryView));
+router.post("/update/", utilities.requireAdmin, utilities.handleErrors(invController.updateInventory));
+
+router.get("/delete/:inv_id", utilities.requireAdmin, utilities.handleErrors(invController.buildDeleteView));
+router.post("/delete", utilities.requireAdmin, utilities.handleErrors(invController.deleteInventory));
 
 module.exports = router;

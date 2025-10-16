@@ -1,20 +1,17 @@
 
 <div class="login-wrapper">
-    <%- messages() %>
+    <%- messages.notice %>
 
 <form id="loginForm" action="/account/login" method="post">
-    <h2>Login</h2>
-    <!-- Username -->
-    <label for="username">Username</label>
-    <input type="text" id="account_username" name="account_username" required>
+  <h2>Login</h2>
 
-    <!-- Password -->
-    <label for="password">Password</label>
-    <input type="password" id="account_password" name="account_password" required>
+  <label for="account_email">Email</label>
+  <input type="email" id="account_email" name="account_email" required>
 
-    <!-- Submit -->
-    <button type="submit">Login</button>    
+  <label for="account_password">Password</label>
+  <input type="password" id="account_password" name="account_password" required>
 
-    <p>Not a member? <a href="/account/register">Register</a></p>
+  <button type="submit">Login</button>    
+  <p>Not a member? <a href="/account/register">Register</a></p>
 </form>
 </div>

@@ -1,11 +1,37 @@
+<div>
 
-<main>
+  <%- messages.notice %>
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
   <h1>Account Management</h1>
-  <% if (messages && messages.success) { %>
-    <p class="notice"><%= messages.success %></p>
+
+  <% if (accountData) { %>
+    <% const account = accountData; %>
+    
+    <!-- Greeting -->
+    <h2>Welcome <%= account.account_firstname %></h2>
+
+    <!-- Update Account link (always visible) -->
+    <p>
+      <a href="/account/update/<%= account.account_id %>">Update Account Information</a>
+    </p>
+
+    <!-- Inventory Management link (Employee/Admin only) -->
+    <% if (["Admin", "Employee"].includes(account.account_type)) { %>
+      <h3>Inventory Management</h3>
+      <p>
+        <a href="/inv/">Go to Inventory Management</a>
+      </p>
+    <% } %>
+
+  <% } else { %>
+    <p>You are not logged in.</p>
   <% } %>
-  <% if (messages && messages.error) { %>
-    <p class="error"><%= messages.error %></p>
-  <% } %>
-  <p>You're logged in.</p>
-</main>
+
+</div>
