@@ -6,7 +6,7 @@ const accountValidate = require("../utilities/account-validation")
 
 // Route to build account management view
 router.get(
-  "/management",
+  "/",
   utilities.checkLogin,
   utilities.handleErrors(accountController.buildAccountManagement)
 )
@@ -18,11 +18,7 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 // Route to deliver account update view
-router.get(
-  "/update/:account_id",
-  utilities.checkLogin,
-  utilities.handleErrors(accountController.buildUpdateAccount)
-)
+router.get("/update/:account_id", utilities.checkLogin, utilities.handleErrors(accountController.updateAccountView))
 
 // Process account update form submission
 router.post(

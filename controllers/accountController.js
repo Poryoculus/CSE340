@@ -156,33 +156,59 @@ async function updateAccountInfo(req, res) {
 /* ****************************************
 * Handle password change
 * *************************************** */
-async function changePassword(req, res) {
+/* ****************************************
+* Handle password change
+* *************************************** */
+async function updateAccountPassword(req, res) {
   const { account_id, new_password } = req.body
   const errors = req.validationErrors ? req.validationErrors() : null
 
   if (errors) {
+    let nav = await utilities.getNav()
+    const account = await accountModel.getAccountById(account_id)
+    
     return res.render("account/update", {
       title: "Update Account",
-      account: { account_id },
+      nav,
+      account, 
       errors,
       messages: req.flash()
     })
   }
 
-  const hashedPassword = await bcrypt.hash(new_password, 10)
-  const result = await accountModel.updateAccountPassword({ account_id, hashedPassword })
+  try {
+    const hashedPassword = await bcrypt.hash(new_password, 10)
+    const result = await accountModel.updateAccountPassword({ account_id, hashedPassword })
 
-  if (result) req.flash("notice", "Password updated successfully")
-  else req.flash("notice", "Failed to update password")
+    if (result) {
+      req.flash("notice", "Password updated successfully")
+    } else {
+      req.flash("notice", "Failed to update password")
+    }
 
-  const updatedAccount = await accountModel.getAccountById(account_id)
+    let nav = await utilities.getNav()
+    const updatedAccount = await accountModel.getAccountById(account_id)
 
-  res.render("account/management", {
-    title: "Account Management",
-    account: updatedAccount,
-    errors: null,
-    messages: req.flash()
-  })
+    res.render("account/management", {
+      title: "Account Management",
+      nav,
+      account: updatedAccount,
+      errors: null,
+      messages: req.flash()
+    })
+  } catch (error) {
+    let nav = await utilities.getNav()
+    const account = await accountModel.getAccountById(account_id)
+    
+    req.flash("notice", "Error updating password")
+    res.render("account/update", {
+      title: "Update Account",
+      nav,
+      account,
+      errors: null,
+      messages: req.flash()
+    })
+  }
 }
 
 /* ****************************************
@@ -203,6 +229,7 @@ async function accountLogout(req, res) {
   }
 }
 
+
 /* ****************************************
 * Export controller functions
 * *************************************** */
@@ -215,5 +242,5 @@ module.exports = {
   buildAccountManagement,
   updateAccountView,
   updateAccountInfo,
-  changePassword
+  updateAccountPassword
 }

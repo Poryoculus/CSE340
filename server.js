@@ -37,6 +37,12 @@ app.set("layout", "./layouts/layout"); // layout not at view root
  * Middleware
  *************************/
 // Session Middleware
+
+
+// Body Parsing Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(
   session({
     store: new pgSession({

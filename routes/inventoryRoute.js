@@ -5,7 +5,7 @@ const invValidate = require('../utilities/inv-validation');
 const utilities = require("../utilities/");
 
 // Public routes (accessible to all visitors)
-router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
+router.get("/type/:classificationId",invController.buildByClassificationId);
 router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInvId));
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
 router.get("/trigger-error", utilities.handleErrors(invController.triggerError));
@@ -36,5 +36,6 @@ router.post("/update/", utilities.requireAdmin, utilities.handleErrors(invContro
 
 router.get("/delete/:inv_id", utilities.requireAdmin, utilities.handleErrors(invController.buildDeleteView));
 router.post("/delete", utilities.requireAdmin, utilities.handleErrors(invController.deleteInventory));
+
 
 module.exports = router;

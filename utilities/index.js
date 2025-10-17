@@ -7,7 +7,7 @@ const Util = {}
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-Util.getNav = async function (req, res, next) {
+Util.getNav = async function () {
   let data = await invModel.getClassifications()
   let list = "<ul>"
     list += '<li><a href="/" title="Home page">Home</a></li>'
@@ -149,7 +149,7 @@ Util.checkJWTToken = (req, res, next) => {
 
 Util.buildClassificationList = async function (selectedId = null) {
   const data = await invModel.getClassifications()
-  let list = `<select name="classification_id" id="classification_id" required>`
+let list = `<select name="classification_id" id="classificationList" required>`
   list += `<option value="">Choose a Classification</option>`
   data.rows.forEach((row) => {
     list += `<option value="${row.classification_id}" ${

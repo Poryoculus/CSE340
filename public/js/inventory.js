@@ -1,6 +1,5 @@
-'use strict' 
- 
- // Get a list of items in inventory based on the classification_id 
+'use strict'
+// Get a list of items in inventory based on the classification_id 
  let classificationList = document.querySelector("#classificationList")
  classificationList.addEventListener("change", function () { 
   let classification_id = classificationList.value 
@@ -22,7 +21,7 @@
   }) 
  })
 
- // Build inventory items into HTML table components and inject into DOM 
+// Build inventory items into HTML table components and inject into DOM 
 function buildInventoryList(data) { 
  let inventoryDisplay = document.getElementById("inventoryDisplay"); 
  // Set up the table labels 

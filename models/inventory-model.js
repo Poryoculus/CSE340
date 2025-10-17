@@ -1,6 +1,5 @@
 const pool = require("../database/")
 
-const { get } = require("../routes/static")
 
 /* ***************************
  *  Get all classification data
@@ -148,6 +147,15 @@ async function deleteInventoryItem(inv_id) {
   }
 }
 
-module.exports = { deleteInventoryItem, updateInventory, addInventoryItem, addClassification ,getClassifications, getInventoryByClassificationId, getVehicleById  }
+
+module.exports = { 
+  deleteInventoryItem, 
+  updateInventory, 
+  addInventoryItem, 
+  addClassification,
+  getClassifications, 
+  getInventoryByClassificationId, 
+  getVehicleById 
+};
 
 

@@ -18,12 +18,18 @@ validate.registrationRules = () => {
       .notEmpty()
       .withMessage("Please provide a last name."),
     body("account_email")
-      .trim()
-      .escape()
-      .notEmpty()
-      .isEmail()
-      .normalizeEmail()
-      .withMessage("A valid email is required."),
+       .trim()
+       .escape()
+       .notEmpty()
+       .isEmail()
+       .normalizeEmail()
+       .custom((value) => {
+         if (value.endsWith(".edu") || value.match(/\.edu\.[a-z]{2}$/i)) {
+           console.log("User registered with an EDU email:", value)
+         }
+         return true
+       })
+       .withMessage("A valid email is required."),
     body("account_password")
       .trim()
       .notEmpty()
@@ -65,12 +71,18 @@ validate.checkRegData = async (req, res, next) => {
 validate.loginRules = () => {
   return [
     body("account_email")
-      .trim()
-      .escape()
-      .notEmpty()
-      .isEmail()
-      .normalizeEmail()
-      .withMessage("Please provide a valid email."),
+       .trim()
+       .escape()
+       .notEmpty()
+       .isEmail()
+       .normalizeEmail()
+       .custom((value) => {
+         if (value.endsWith(".edu") || value.match(/\.edu\.[a-z]{2}$/i)) {
+           console.log("User registered with an EDU email:", value)
+         }
+         return true
+       })
+       .withMessage("A valid email is required."),
     body("account_password")
       .trim()
       .notEmpty()
@@ -126,24 +138,40 @@ validate.accountUpdateRules = () => {
  *  Check account update data
  * *************************************** */
 validate.checkAccountUpdateData = async (req, res, next) => {
-  const { account_firstname, account_lastname, account_email, account_id } = req.body
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
+  // Add safety check for req.body
+  if (!req.body) {
     const nav = await utilities.getNav()
-    res.render("account/update", {
-      errors,
+    return res.render("account/update", {
+      errors: [{ msg: "Invalid form data. Please try again." }],
       title: "Update Account",
       nav,
+      account: null
+    })
+  }
+
+  const { account_firstname, account_lastname, account_email, account_id } = req.body
+  const errors = validationResult(req)
+  
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav()
+    // Create an account object to match what your view expects
+    const account = {
+      account_id,
       account_firstname,
       account_lastname,
-      account_email,
-      account_id
+      account_email
+    }
+    
+    res.render("account/update", {
+      errors: errors.array(),
+      title: "Update Account",
+      nav,
+      account // Pass as account object, not individual properties
     })
     return
   }
   next()
 }
-
 /* ****************************************
  *  Password Change Validation Rules
  * *************************************** */
@@ -176,6 +204,50 @@ validate.checkPasswordData = async (req, res, next) => {
       title: "Update Account",
       nav,
       account_id
+    })
+    return
+  }
+  next()
+}
+
+/* ***************************
+ * Check Update Data
+ * ************************ */
+validate.checkUpdateData = async (req, res, next) => {
+  const { 
+    inv_id,
+    inv_make, 
+    inv_model, 
+    inv_year, 
+    inv_description, 
+    inv_image, 
+    inv_thumbnail, 
+    inv_price, 
+    inv_miles, 
+    inv_color, 
+    classification_id 
+  } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    const classificationSelect = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    res.render("inventory/edit-inventory", {
+      errors,
+      title: "Edit " + itemName,
+      nav,
+      classificationSelect,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id
     })
     return
   }

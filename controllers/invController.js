@@ -1,7 +1,10 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 
+console.log("Available functions:", Object.keys(invModel));
+
 const invCont = {}
+
 
 /* ***************************
  *  Build inventory by classification view
@@ -68,15 +71,36 @@ invCont.buildManagementView = async function (req, res, next) {
  * ************************** */
 
 invCont.buildAddClassification = async function (req, res, next) {
-  console.log(utilities.getNav())
-  let nav = await utilities.getNav()
-  res.render("inventory/add-classification", {
-    title: "Add New Classification",
-    nav,
-    messages: req.flash("notice"),
-    errors: null,
-    classification_name: '' 
-  })
+  try {
+    let nav = await utilities.getNav();
+    const { classification_name } = req.body;
+
+    // Add the classification
+    const result = await invModel.addClassification(classification_name);
+
+    if (result) {
+      // SUCCESS: Get updated classifications and rebuild the select
+      const classifications = await invModel.getClassifications();
+      let classificationSelect = await utilities.buildClassificationList(classifications);
+      
+      req.flash("notice", `Classification "${classification_name}" was successfully added.`);
+      res.render("inventory/management", {
+        title: "Inventory Management",
+        nav,
+        classificationSelect, 
+        errors: null,
+      });
+    } else {
+      req.flash("notice", "Sorry, adding the classification failed.");
+      res.render("inventory/add-classification", {
+        title: "Add Classification",
+        nav,
+        errors: null,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 }
 
 /* ***************************
@@ -207,7 +231,7 @@ invCont.editInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
 
   // Fetch the current inventory item
-  const itemData = await invModel.getInventoryById(inv_id)
+  const itemData = await invModel.getVehicleById(inv_id)
 
   // Build classification select list, pre-select the item's current classification
   const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
