@@ -73,31 +73,12 @@ invCont.buildManagementView = async function (req, res, next) {
 invCont.buildAddClassification = async function (req, res, next) {
   try {
     let nav = await utilities.getNav();
-    const { classification_name } = req.body;
-
-    // Add the classification
-    const result = await invModel.addClassification(classification_name);
-
-    if (result) {
-      // SUCCESS: Get updated classifications and rebuild the select
-      const classifications = await invModel.getClassifications();
-      let classificationSelect = await utilities.buildClassificationList(classifications);
-      
-      req.flash("notice", `Classification "${classification_name}" was successfully added.`);
-      res.render("inventory/management", {
-        title: "Inventory Management",
-        nav,
-        classificationSelect, 
-        errors: null,
-      });
-    } else {
-      req.flash("notice", "Sorry, adding the classification failed.");
-      res.render("inventory/add-classification", {
-        title: "Add Classification",
-        nav,
-        errors: null,
-      });
-    }
+    res.render("inventory/add-classification", {
+      title: "Add New Classification",
+      nav,
+      errors: null,
+      messages: req.flash("notice")
+    });
   } catch (error) {
     next(error);
   }
@@ -352,6 +333,29 @@ invCont.deleteInventory = async function (req, res, next) {
   } else {
     req.flash("notice", "Failed to delete inventory item.")
     res.redirect(`/inv/delete/${inv_id}`)
+  }
+}
+/* ***************************
+ * Return Inventory by Classification AND Price Range As JSON
+ * ************************** */
+invCont.getInventoryByPriceJSON = async function (req, res, next) {
+  try {
+    const classification_id = req.params.classification_id;
+    const minPrice = req.query.minPrice || 0;
+    const maxPrice = req.query.maxPrice || 999999;
+    
+    console.log(`Filtering classification ${classification_id} with price range ${minPrice}-${maxPrice}`);
+    
+    const data = await invModel.getInventoryByClassificationIdAndPrice(
+      classification_id, 
+      minPrice, 
+      maxPrice
+    );
+    
+    res.json(data);
+  } catch (error) {
+    console.error("Error in getInventoryByPriceJSON:", error);
+    next(error);
   }
 }
 

@@ -693,6 +693,17 @@ form p a:hover {
   text-decoration: underline;
 }
 
+.price-filter-section {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+}
+
+.price-filter-section h3 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
 /* Optional extra polish for very wide screens */
 @media (min-width: 1100px) {
   #heroe-section img#Heroe {

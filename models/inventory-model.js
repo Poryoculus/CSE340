@@ -146,6 +146,26 @@ async function deleteInventoryItem(inv_id) {
     console.error("Delete Inventory Error: " + error)
   }
 }
+/* ***************************
+ * Get inventory items by classification_id AND price range
+ * ************************** */
+async function getInventoryByClassificationIdAndPrice(classification_id, minPrice = 0, maxPrice = 999999) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.inventory AS i 
+       JOIN public.classification AS c 
+       ON i.classification_id = c.classification_id 
+       WHERE i.classification_id = $1 
+       AND i.inv_price BETWEEN $2 AND $3
+       ORDER BY i.inv_price`,
+      [classification_id, minPrice, maxPrice]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getInventoryByClassificationIdAndPrice error: " + error)
+    return []
+  }
+}
 
 
 module.exports = { 
@@ -155,7 +175,8 @@ module.exports = {
   addClassification,
   getClassifications, 
   getInventoryByClassificationId, 
-  getVehicleById 
+  getVehicleById,
+  getInventoryByClassificationIdAndPrice
 };
 
 

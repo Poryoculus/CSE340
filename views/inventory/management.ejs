@@ -13,6 +13,26 @@
 
 <h2>Manage Inventory</h2>
 
+<div class="price-filter-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+  <h3>Filter by Price Range</h3>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="minPrice">Min Price:</label>
+      <input type="number" id="minPrice" class="form-control" placeholder="0" min="0">
+    </div>
+    <div class="col-md-3">
+      <label for="maxPrice">Max Price:</label>
+      <input type="number" id="maxPrice" class="form-control" placeholder="100000" min="0">
+    </div>
+    <div class="col-md-2">
+      <button id="applyFilter" class="btn btn-primary" style="margin-top: 25px;">Apply Filter</button>
+    </div>
+    <div class="col-md-2">
+      <button id="clearFilter" class="btn btn-secondary" style="margin-top: 25px;">Clear Filter</button>
+    </div>
+  </div>
+</div>
+
 
 <div id="classificationContainer">
   <%- classificationSelect %>

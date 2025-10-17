@@ -37,5 +37,7 @@ router.post("/update/", utilities.requireAdmin, utilities.handleErrors(invContro
 router.get("/delete/:inv_id", utilities.requireAdmin, utilities.handleErrors(invController.buildDeleteView));
 router.post("/delete", utilities.requireAdmin, utilities.handleErrors(invController.deleteInventory));
 
+// Add this with your other routes
+router.get("/getInventoryByPrice/:classification_id", utilities.handleErrors(invController.getInventoryByPriceJSON));
 
 module.exports = router;
