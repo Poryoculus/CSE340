@@ -1,6 +1,5 @@
 const pool = require("../database/")
 
-const { get } = require("../routes/static")
 
 /* ***************************
  *  Get all classification data
