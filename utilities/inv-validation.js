@@ -91,13 +91,11 @@ invValidate.inventoryRules = () => {
 
     body('inv_image')
       .optional({ checkFalsy: true })
-      .trim()
-      .escape(),
+      .trim(),
 
     body('inv_thumbnail')
       .optional({ checkFalsy: true })
-      .trim()
-      .escape(),
+      .trim(),
     
     body('inv_color')
       .trim()
