@@ -47,7 +47,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     name: "sessionId",
-  })
+  }),
 );
 
 // Body Parsing Middleware

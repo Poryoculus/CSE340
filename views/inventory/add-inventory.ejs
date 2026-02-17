@@ -1,7 +1,16 @@
 
 <h1>Add Inventory Item</h1>
 
-
+<% if (errors && errors.length > 0) { %>
+  <div class="error-messages">
+    <h2>Please fix the following errors:</h2>
+    <ul>
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }); %>
+    </ul>
+  </div>
+<% } %>
 
 <form id="add-inventory-form" action="/inv/add-inventory" method="POST">
   <!-- Classification select (util returns <select> with selected option if present) -->
@@ -33,21 +42,20 @@
 
   <label for="inv_image">Image Path</label>
   <input id="inv_image" name="inv_image" type="text"
-         value="<%= formData.inv_image || '/images/no-image-available.png' %>">
+         value="<%= formData.inv_image || '/images/vehicles/no-image.png' %>">
 
   <label for="inv_thumbnail">Thumbnail Path</label>
   <input id="inv_thumbnail" name="inv_thumbnail" type="text"
-         value="<%= formData.inv_thumbnail || '/images/no-image-available-thumb.png' %>">
-    <label for="inv_color">Color</label>
-    <input
-    type="text"
+         value="<%= formData.inv_thumbnail || '/images/vehicles/no-image-tn.png' %>">
+
+  <label for="inv_color">Color</label>
+  <input type="text"
     id="inv_color"
     name="inv_color"
     value="<%= formData.inv_color || '' %>"
     required
     pattern="^[A-Za-z0-9 ]+$"
-    title="Letters, numbers, and spaces only"
-    />
+    title="Letters, numbers, and spaces only">
 
   <button type="submit">Add Vehicle</button>
 </form>

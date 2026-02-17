@@ -76,7 +76,7 @@ async function accountLogin(req, res) {
       } else {
         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
       }
-      return res.redirect("/account/")
+      return res.redirect("/account/management")
     } else {
       req.flash("notice", "Please check your credentials and try again.")
       res.status(400).render("account/login", { title: "Login", nav, errors: null, account_email })
