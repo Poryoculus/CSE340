@@ -7,6 +7,11 @@
       <!-- Greeting link visible only when logged in -->
       <a href="/account/management" title="Go to your account">Welcome <%= accountData.firstname %></a>
 
+      <!-- My Favorites link -->
+      <a href="/favorites" title="View your saved vehicles">
+        My Favorites
+      </a>
+
       <!-- Logout link -->
       <a href="/account/logout" title="Click to log out">Logout</a>
     <% } else { %>
