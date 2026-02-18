@@ -111,7 +111,7 @@ async function buildAccountManagement(req, res, next) {
 * *************************************** */
 async function updateAccountView(req, res) {
   let nav = await utilities.getNav()
-  const account_id = parseInt(req.params.account_id)
+  const account_id = parseInt(res.locals.accountData.account_id)
   const account = await accountModel.getAccountById(account_id)
   res.render("account/update", {
     title: "Update Account",
@@ -126,63 +126,81 @@ async function updateAccountView(req, res) {
 * Handle account info update
 * *************************************** */
 async function updateAccountInfo(req, res) {
-  const { account_id, first_name, last_name, email } = req.body
-  const errors = req.validationErrors ? req.validationErrors() : null
+  const { 
+    account_id, 
+    account_firstname, 
+    account_lastname, 
+    account_email 
+  } = req.body
 
-  if (errors) {
+  let nav = await utilities.getNav()
+
+  const result = await accountModel.updateAccountInfo({
+    account_id,
+    first_name: account_firstname,
+    last_name: account_lastname,
+    email: account_email
+  })
+
+  if (result) {
+    req.flash("notice", "Account information updated successfully")
+
+    const updatedAccount = await accountModel.getAccountById(account_id)
+
+    return res.render("account/management", {
+      title: "Account Management",
+      nav,
+      account: updatedAccount,
+      errors: null,
+      messages: req.flash()
+    })
+  } else {
+    req.flash("notice", "Failed to update account information")
+
     return res.render("account/update", {
       title: "Update Account",
-      account: { account_id, first_name, last_name, email },
-      errors,
+      nav,
+      account: { 
+        account_id, 
+        account_firstname, 
+        account_lastname, 
+        account_email 
+      },
+      errors: null,
       messages: req.flash()
     })
   }
-
-  const result = await accountModel.updateAccountInfo({ account_id, first_name, last_name, email })
-
-  if (result) req.flash("notice", "Account information updated successfully")
-  else req.flash("notice", "Failed to update account information")
-
-  const updatedAccount = await accountModel.getAccountById(account_id)
-
-  res.render("account/management", {
-    title: "Account Management",
-    account: updatedAccount,
-    errors: null,
-    messages: req.flash()
-  })
 }
-
 /* ****************************************
 * Handle password change
 * *************************************** */
-async function changePassword(req, res) {
-  const { account_id, new_password } = req.body
-  const errors = req.validationErrors ? req.validationErrors() : null
+async function updateAccountPassword(req, res) {
+  const { account_id, account_password } = req.body
+  let nav = await utilities.getNav()
 
-  if (errors) {
+  const hashedPassword = await bcrypt.hash(account_password, 10)
+
+  const result = await accountModel.updateAccountPassword({
+    account_id,
+    hashedPassword
+  })
+
+  if (result) {
+    req.flash("notice", "Password updated successfully")
+    return res.redirect("/account/management")
+  } else {
+    req.flash("notice", "Failed to update password")
+
+    const account = await accountModel.getAccountById(account_id)
+
     return res.render("account/update", {
       title: "Update Account",
-      account: { account_id },
-      errors,
+      nav,
+      account,
+      errors: null,
       messages: req.flash()
     })
   }
-
-  const hashedPassword = await bcrypt.hash(new_password, 10)
-  const result = await accountModel.updateAccountPassword({ account_id, hashedPassword })
-
-  if (result) req.flash("notice", "Password updated successfully")
-  else req.flash("notice", "Failed to update password")
-
-  const updatedAccount = await accountModel.getAccountById(account_id)
-
-  res.render("account/management", {
-    title: "Account Management",
-    account: updatedAccount,
-    errors: null,
-    messages: req.flash()
-  })
 }
 
 /* ****************************************
@@ -215,5 +233,5 @@ module.exports = {
   buildAccountManagement,
   updateAccountView,
   updateAccountInfo,
-  changePassword
+  updateAccountPassword,
 }

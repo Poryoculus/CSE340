@@ -24,7 +24,7 @@ router.get(
 router.get(
   "/update/:account_id",
   utilities.checkLogin,
-  utilities.handleErrors(accountController.buildUpdateAccount),
+  utilities.handleErrors(accountController.updateAccountView),
 );
 
 // Process account update form submission

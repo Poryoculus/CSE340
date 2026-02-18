@@ -1,6 +1,7 @@
 const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const validate = {}
+const accountModel = require("../models/account-model")
 
 /* ****************************************
  *  Registration Data Validation Rules
@@ -28,7 +29,7 @@ validate.registrationRules = () => {
       .trim()
       .notEmpty()
       .isStrongPassword({
-        minLength: 12,
+        minLength: 8,
         minLowercase: 1,
         minUppercase: 1,
         minNumbers: 1,
@@ -152,13 +153,8 @@ validate.passwordRules = () => {
     body("account_password")
       .trim()
       .notEmpty()
-      .isStrongPassword({
-        minLength: 12,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1,
-      })
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)
+      .withMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.")
       .withMessage("Password does not meet requirements."),
   ]
 }
@@ -169,17 +165,21 @@ validate.passwordRules = () => {
 validate.checkPasswordData = async (req, res, next) => {
   const { account_id } = req.body
   const errors = validationResult(req)
+
   if (!errors.isEmpty()) {
     const nav = await utilities.getNav()
-    res.render("account/update", {
+    const account = await accountModel.getAccountById(account_id)
+
+    return res.render("account/update", {
       errors,
       title: "Update Account",
       nav,
-      account_id
+      account,
+      messages: req.flash()
     })
-    return
   }
   next()
 }
+
 
 module.exports = validate
