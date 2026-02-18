@@ -53,8 +53,8 @@ invCont.buildManagementView = async function (req, res, next) {
   
   const classificationSelect = await utilities.buildClassificationList()
 
-  res.render("inventory/management", {
-    title: "Inventory Management",
+  res.render("./inventory/management", {
+    title: "Vehicle Management",
     nav,
     messages: req.flash("notice"),
     classificationSelect,
@@ -179,10 +179,17 @@ invCont.addInventory = async function (req, res, next) {
   }
 }
 
-invCont.getInventoryJSON = async function (req, res, next) {
-  const classification_id = req.params.classification_id
-  const data = await invModel.getInventoryByClassificationId(classification_id)
-  res.json(data) // return JSON data for your JS fetch
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  if (invData[0].inv_id) {
+    return res.json(invData)
+  } else {
+    next(new Error("No data returned"))
+  }
 }
 
 invCont.triggerError = async function (req, res, next){
@@ -198,7 +205,7 @@ invCont.editInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
 
   // Fetch the current inventory item
-  const itemData = await invModel.getInventoryById(inv_id)
+  const itemData = await invModel.getVehicleById(inv_id)
 
   // Build classification select list, pre-select the item's current classification
   const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
@@ -220,7 +227,7 @@ invCont.editInventoryView = async function (req, res, next) {
     inv_price: itemData.inv_price,
     inv_miles: itemData.inv_miles,
     inv_color: itemData.inv_color,
-    classification_id: itemData.classification_id
+    classification_id: itemData.classification_id,
   })
 }
 

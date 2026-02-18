@@ -76,12 +76,16 @@ async function updateAccountPassword({ account_id, hashedPassword }) {
       SET account_password = $1
       WHERE account_id = $2
       RETURNING *`
+      
     const result = await pool.query(sql, [hashedPassword, account_id])
+
     return result.rowCount === 1
   } catch (error) {
+    console.error("Update Password Error:", error)
     return false
   }
 }
+
 
 module.exports = {
   registerAccount,
