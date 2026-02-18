@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const favoritesModel = require("../models/favorites-model")
 
 const invCont = {}
 
@@ -22,11 +23,14 @@ invCont.buildByClassificationId = async function (req, res, next) {
 /* ***************************
  *  Build inventory by Vehicle ID view
  * ************************** */
+/* ***************************
+ *  Build inventory by Vehicle ID view
+ * ************************** */
 invCont.buildByInvId = async function (req, res, next) {
   const inv_id = req.params.inv_id
   const data = await invModel.getVehicleById(inv_id)
   const vehicle = data
-  
+
   if (!vehicle) {
     return res.status(404).render("errors/error", {
       title: "Vehicle Not Found",
@@ -34,16 +38,24 @@ invCont.buildByInvId = async function (req, res, next) {
     })
   }
 
-  const detail = await utilities.buildVehicleDetail(vehicle)
+  let isFavorite = false
+
+  if (res.locals.loggedin) {
+    const account_id = res.locals.accountData.account_id
+    isFavorite = await favoritesModel.checkIfFavorite(account_id, inv_id)
+  }
+
+  const detail = await utilities.buildVehicleDetail(vehicle, isFavorite)
+
   let nav = await utilities.getNav()
   
   res.render("inventory/details", {
     title: `${vehicle.inv_make} ${vehicle.inv_model} Details`,
     nav,
-    detail
+    detail,
+    messages: req.flash()
   })
 }
-
 /* ***************************
  *  Build Add Management view
  * ************************** */

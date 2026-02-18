@@ -20,6 +20,8 @@ const baseController = require("./controllers/baseController");
 const staticRoutes = require("./routes/static");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
+const favoritesRoute = require("./routes/favoritesRoute")
+
 
 /* ***********************
  * Express App Setup
@@ -81,6 +83,9 @@ app.use("/account", accountRoute);
 
 // Static Routes
 app.use(staticRoutes);
+
+// Favorites Routes
+app.use("/favorites", favoritesRoute)
 
 // File Not Found Route (must be last)
 app.use(async (req, res, next) => {
